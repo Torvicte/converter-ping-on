@@ -4,66 +4,228 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Converter Ping On</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <section class="hero">
-        <p class="eyebrow">Converter Ping On</p>
-        <h1>Convierte tus imagenes en segundos</h1>
-        <p class="lead">
-          Hecho para lo practico: elige tus archivos, selecciona el formato y conviertelos por lote.
-          Incluye soporte directo para HEIC a JPEG y PNG.
-        </p>
-      </section>
+    <div id="splash">
+      <div class="splash-logo">&#8646;</div>
+      <p class="splash-name">Converter<span> Ping On</span></p>
+      <div class="splash-bar-wrap">
+        <div class="splash-bar"></div>
+      </div>
+      <p class="splash-hint">Iniciando...</p>
+    </div>
 
-      <section class="panel">
-        <div class="actions">
-          <button id="pickFilesButton" class="primary">Elegir archivos</button>
-          <button id="pickFolderButton" class="secondary">Elegir carpeta de salida</button>
+    <div id="convOverlay" class="hidden">
+      <div class="conv-card">
+        <div class="conv-spinner">
+          <svg class="spinner-svg" viewBox="0 0 36 36">
+            <circle class="spinner-track" cx="18" cy="18" r="15"></circle>
+            <circle class="spinner-arc" cx="18" cy="18" r="15"></circle>
+          </svg>
+        </div>
+        <p class="conv-title">Convirtiendo archivos</p>
+        <p class="conv-progress" id="convProgress">0 / 0</p>
+        <div class="conv-bar-wrap">
+          <div class="conv-bar-fill" id="convBarFill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="app">
+      <aside class="sidebar">
+        <div class="sidebar-logo">
+          <div class="logo-icon">&#8646;</div>
+          <div class="logo-text">Converter<span> Ping On</span></div>
         </div>
 
-        <div class="controls">
-          <label>
-            <span>Formato de salida</span>
-            <select id="formatSelect">
-              <option value="jpeg">JPEG</option>
-              <option value="png">PNG</option>
-              <option value="webp">WEBP</option>
-              <option value="bmp">BMP</option>
-              <option value="tiff">TIFF</option>
-            </select>
-          </label>
+        <nav class="sidebar-nav">
+          <button class="nav-item active" data-tab="images">
+            <span class="nav-icon">&#9634;</span>
+            <span>Imagenes</span>
+          </button>
+          <button class="nav-item" data-tab="videos">
+            <span class="nav-icon">&#9655;</span>
+            <span>Videos</span>
+          </button>
+          <button class="nav-item" data-tab="history">
+            <span class="nav-icon">&#9711;</span>
+            <span>Historial</span>
+          </button>
+        </nav>
 
-          <label>
-            <span>Calidad JPEG</span>
-            <input id="qualityRange" type="range" min="40" max="100" step="1" value="92" />
-            <strong id="qualityValue">92</strong>
-          </label>
+        <div class="sidebar-footer">
+          <button class="theme-btn" id="themeToggle" title="Cambiar tema">&#9680;</button>
         </div>
+      </aside>
 
-        <div class="dropzone" id="dropzone">
-          <p>Arrastra imagenes aqui o usa "Elegir archivos".</p>
-          <small>Formatos: HEIC, HEIF, JPG, PNG, WEBP, BMP, TIFF, GIF, AVIF</small>
-        </div>
-
-        <div class="summary">
-          <div>
-            <span class="label">Archivos</span>
-            <p id="filesCount">0 seleccionados</p>
+      <main class="main">
+        <section class="tab-panel active" id="tab-images">
+          <div class="panel-header">
+            <h1 class="panel-title">Convertir imagenes</h1>
+            <span class="panel-subtitle">HEIC · JPG · PNG · WEBP · BMP · TIFF</span>
           </div>
-          <div>
-            <span class="label">Salida</span>
-            <p id="outputFolder">Sin carpeta seleccionada</p>
+
+          <div class="dropzone" id="imgDropzone">
+            <div class="dz-inner">
+              <div class="dz-icon">IMG</div>
+              <p class="dz-title">Arrastra imagenes aqui</p>
+              <p class="dz-sub">HEIC, HEIF, JPG, PNG, WEBP, BMP, TIFF, GIF, AVIF</p>
+            </div>
           </div>
-        </div>
 
-        <ul id="fileList" class="fileList"></ul>
+          <div class="controls-row">
+            <div class="card">
+              <p class="card-title">Formato de salida</p>
+              <div class="chip-group" id="imgFormatChips">
+                <button class="chip active" data-format="jpeg">JPEG</button>
+                <button class="chip" data-format="png">PNG</button>
+                <button class="chip" data-format="webp">WEBP</button>
+                <button class="chip" data-format="bmp">BMP</button>
+                <button class="chip" data-format="tiff">TIFF</button>
+              </div>
+            </div>
 
-        <button id="convertButton" class="convert">Convertir ahora</button>
-        <p id="status" class="status">Listo para empezar.</p>
-      </section>
-    </main>
+            <div class="card">
+              <p class="card-title">Calidad JPEG</p>
+              <div class="range-wrap">
+                <div class="range-header">
+                  <span class="field-label">Compresion</span>
+                  <span class="field-value" id="imgQualityDisplay">92</span>
+                </div>
+                <input type="range" id="imgQualityRange" min="40" max="100" step="1" value="92" />
+                <div class="range-footer">
+                  <span class="field-label">Menor peso</span>
+                  <span class="field-label">Mayor calidad</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card queue-card">
+            <p class="card-title">Cola de archivos - <span id="imgFilesCount">0 archivos</span></p>
+            <div class="file-queue" id="imgFileQueue"></div>
+          </div>
+
+          <div class="action-bar">
+            <div class="action-buttons">
+              <button class="btn btn-secondary" id="imgPickFiles">Agregar archivos</button>
+              <button class="btn btn-ghost" id="imgClearFiles">Limpiar</button>
+            </div>
+            <div class="action-info">
+              <span class="action-label">Carpeta de salida</span>
+              <span class="action-value no-folder" id="imgOutputLabel">Sin seleccionar</span>
+            </div>
+            <div class="action-buttons">
+              <button class="btn btn-secondary" id="imgPickFolder">Carpeta</button>
+              <button class="btn btn-primary" id="imgConvertBtn" disabled>Convertir</button>
+            </div>
+          </div>
+
+          <p class="status-msg info" id="imgStatus">Listo para empezar.</p>
+        </section>
+
+        <section class="tab-panel" id="tab-videos">
+          <div class="panel-header">
+            <h1 class="panel-title">Convertir videos</h1>
+            <span class="panel-subtitle">MP4 · WEBM · MP3 · AAC · AVI</span>
+          </div>
+
+          <div class="dropzone" id="vidDropzone">
+            <div class="dz-inner">
+              <div class="dz-icon">VID</div>
+              <p class="dz-title">Arrastra tu video aqui</p>
+              <p class="dz-sub">MP4, MOV, AVI, MKV, WEBM, M4V</p>
+            </div>
+          </div>
+
+          <div class="video-grid">
+            <div class="card">
+              <p class="card-title">Formato de salida</p>
+              <div class="chip-group" id="vidFormatChips">
+                <button class="chip active" data-vformat="mp4">MP4</button>
+                <button class="chip" data-vformat="webm">WEBM</button>
+                <button class="chip" data-vformat="avi">AVI</button>
+                <button class="chip" data-vformat="mp3">MP3 - solo audio</button>
+                <button class="chip" data-vformat="aac">AAC - solo audio</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Resolucion</p>
+              <div class="chip-group" id="vidResChips">
+                <button class="chip active" data-res="original">Original</button>
+                <button class="chip" data-res="1920x1080">1080p</button>
+                <button class="chip" data-res="1280x720">720p</button>
+                <button class="chip" data-res="854x480">480p</button>
+                <button class="chip" data-res="640x360">360p</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Calidad del video (CRF)</p>
+              <div class="range-wrap">
+                <div class="range-header">
+                  <span class="field-label">CRF</span>
+                  <span class="field-value" id="vidCrfDisplay">23</span>
+                </div>
+                <input type="range" id="vidCrfRange" min="0" max="51" step="1" value="23" />
+                <div class="range-footer">
+                  <span class="field-label">Maxima calidad (0)</span>
+                  <span class="field-label">Menor peso (51)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <p class="card-title">Frames por segundo</p>
+              <div class="chip-group" id="vidFpsChips">
+                <button class="chip active" data-fps="original">Original</button>
+                <button class="chip" data-fps="60">60 fps</button>
+                <button class="chip" data-fps="30">30 fps</button>
+                <button class="chip" data-fps="24">24 fps</button>
+                <button class="chip" data-fps="15">15 fps</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-bar">
+            <div class="action-buttons">
+              <button class="btn btn-secondary" id="vidPickFile">Seleccionar video</button>
+            </div>
+            <div class="action-info">
+              <span class="action-label">Archivo</span>
+              <span class="action-value no-folder" id="vidFileLabel">Sin seleccionar</span>
+            </div>
+            <div class="action-buttons">
+              <button class="btn btn-secondary" id="vidPickFolder">Carpeta</button>
+              <button class="btn btn-primary" id="vidConvertBtn" disabled>Convertir video</button>
+            </div>
+          </div>
+
+          <p class="status-msg info" id="vidStatus">Selecciona un video para empezar.</p>
+        </section>
+
+        <section class="tab-panel" id="tab-history">
+          <div class="panel-header">
+            <h1 class="panel-title">Historial</h1>
+            <button class="btn btn-ghost" id="clearHistoryBtn">Limpiar</button>
+          </div>
+          <div class="history-list" id="historyList">
+            <div class="history-empty">
+              <span class="history-empty-icon">&#9711;</span>
+              <span class="history-empty-text">No hay conversiones aun</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
 
     <script src="./renderer.js"></script>
   </body>

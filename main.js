@@ -1,6 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
-const { convertFiles } = require("./converter");
+const { convertFiles, convertVideo } = require("./converter");
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -50,6 +50,22 @@ app.whenReady().then(() => {
     return result.canceled ? [] : result.filePaths;
   });
 
+  ipcMain.handle("pick-video-file", async () => {
+    const result = await dialog.showOpenDialog({
+      title: "Selecciona el video que quieres convertir",
+      properties: ["openFile"],
+      filters: [
+        {
+          name: "Videos",
+          extensions: ["mp4", "mov", "avi", "mkv", "webm", "m4v"]
+        },
+        { name: "Todos los archivos", extensions: ["*"] }
+      ]
+    });
+
+    return result.canceled ? "" : result.filePaths[0];
+  });
+
   ipcMain.handle("pick-output-folder", async () => {
     const result = await dialog.showOpenDialog({
       title: "Elige la carpeta de salida",
@@ -60,6 +76,7 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle("convert-files", async (_event, payload) => convertFiles(payload));
+  ipcMain.handle("convert-video", async (_event, payload) => convertVideo(payload));
 
   createWindow();
 
