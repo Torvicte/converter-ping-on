@@ -1,0 +1,55 @@
+{
+  "name": "converter-ping-on",
+  "version": "1.0.0",
+  "description": "Aplicacion de escritorio simple para convertir imagenes, incluyendo HEIC a JPEG y PNG.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win"
+  },
+  "keywords": [
+    "converter",
+    "heic",
+    "jpeg",
+    "png",
+    "electron"
+  ],
+  "author": "OpenAI Codex",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "ffmpeg-static": "^5.3.0",
+    "heic-convert": "^2.1.0"
+  },
+  "devDependencies": {
+    "electron": "^41.3.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.converterpingon.app",
+    "productName": "Converter Ping On",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "converter.js",
+      "src/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Converter Ping On"
+    }
+  }
+}

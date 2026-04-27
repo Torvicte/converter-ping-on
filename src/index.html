@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Converter Ping On</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Converter Ping On</p>
+        <h1>Convierte tus imagenes en segundos</h1>
+        <p class="lead">
+          Hecho para lo practico: elige tus archivos, selecciona el formato y conviertelos por lote.
+          Incluye soporte directo para HEIC a JPEG y PNG.
+        </p>
+      </section>
+
+      <section class="panel">
+        <div class="actions">
+          <button id="pickFilesButton" class="primary">Elegir archivos</button>
+          <button id="pickFolderButton" class="secondary">Elegir carpeta de salida</button>
+        </div>
+
+        <div class="controls">
+          <label>
+            <span>Formato de salida</span>
+            <select id="formatSelect">
+              <option value="jpeg">JPEG</option>
+              <option value="png">PNG</option>
+              <option value="webp">WEBP</option>
+              <option value="bmp">BMP</option>
+              <option value="tiff">TIFF</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Calidad JPEG</span>
+            <input id="qualityRange" type="range" min="40" max="100" step="1" value="92" />
+            <strong id="qualityValue">92</strong>
+          </label>
+        </div>
+
+        <div class="dropzone" id="dropzone">
+          <p>Arrastra imagenes aqui o usa "Elegir archivos".</p>
+          <small>Formatos: HEIC, HEIF, JPG, PNG, WEBP, BMP, TIFF, GIF, AVIF</small>
+        </div>
+
+        <div class="summary">
+          <div>
+            <span class="label">Archivos</span>
+            <p id="filesCount">0 seleccionados</p>
+          </div>
+          <div>
+            <span class="label">Salida</span>
+            <p id="outputFolder">Sin carpeta seleccionada</p>
+          </div>
+        </div>
+
+        <ul id="fileList" class="fileList"></ul>
+
+        <button id="convertButton" class="convert">Convertir ahora</button>
+        <p id="status" class="status">Listo para empezar.</p>
+      </section>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+  </html>
